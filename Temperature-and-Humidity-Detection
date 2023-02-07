@@ -1,0 +1,36 @@
+#include <dht.h>
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>
+#define DHT11_PIN 5
+#define BME_SCK 13
+#define BME_MISO 12
+#define BME_MOSI 11
+#define BME_CS 10
+dht DHT;
+Adafruit_BME280 bme; 
+void setup() {
+  Serial.begin(9600);
+  bme.begin(0x76, &Wire);
+  pinMode(DHT11_PIN, INPUT);
+  DHT.attach(DHT11_PIN);
+}
+void loop() {
+  float humidity = DHT.readHumidity();
+  float temperature = DHT.readTemperature();
+  float pressure = bme.readPressure() / 100.0F;
+  float altitude = bme.readAltitude(1013.25);
+  Serial.print("Humidity: ");
+  Serial.print(humidity);
+  Serial.print(" %\t");
+  Serial.print("Temperature: ");
+  Serial.print(temperature);
+  Serial.print(" *C ");
+  Serial.print("Pressure: ");
+  Serial.print(pressure);
+  Serial.print(" hPa ");
+  Serial.print("Altitude: ");
+  Serial.print(altitude);
+  Serial.println(" m");
+  delay(1000);
+}
